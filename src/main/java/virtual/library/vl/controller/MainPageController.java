@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import virtual.library.vl.entity.Role;
 import virtual.library.vl.repository.RoleRepository;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -17,8 +18,10 @@ public class MainPageController {
 
     @GetMapping("/")
     @ResponseBody
-    public List<Role> successLogin(){
-        return roleRepository.findAll();
+    public String successLogin(Principal principal){
+
+
+        return principal.toString();
     }
 
     @GetMapping("/roles")
