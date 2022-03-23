@@ -46,14 +46,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("/loginSuccess")
+                .failureForwardUrl("/loginFailure")
                 .permitAll()
                 .and()
                 .logout()
                 .permitAll()
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID");;
+                .deleteCookies("JSESSIONID")
+                .and().rememberMe().rememberMeParameter("rememberme").key("keepsecret").
+                tokenValiditySeconds(60*60*24*7);
     }
 
     @Override

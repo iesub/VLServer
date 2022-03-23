@@ -19,9 +19,7 @@ public class MainPageController {
     @GetMapping("/")
     @ResponseBody
     public String successLogin(Principal principal){
-
-
-        return principal.toString();
+        return "Login success";
     }
 
     @GetMapping("/roles")
