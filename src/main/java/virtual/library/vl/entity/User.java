@@ -17,7 +17,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id = Long.valueOf(0);
-    String mail;
+    String username;
     String nickname;
     String password;
     @Transient
@@ -30,7 +30,7 @@ public class User implements UserDetails {
     public User(){}
 
     public String getUsername(){
-        return mail;
+        return username;
     }
 
     @Override

@@ -41,13 +41,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
             Exception {
         http.csrf().disable().cors().and()
                 .authorizeRequests()
-                .antMatchers( "/login")
+                .antMatchers( "/login", "/ifAuthenticated", "/", "/login", "/registration",
+                        "/loginFailure", "/loginSuccess", "/registration")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .defaultSuccessUrl("/loginSuccess")
-                .failureForwardUrl("/loginFailure")
+                .failureUrl("/loginFailure")
                 .permitAll()
                 .and()
                 .logout()

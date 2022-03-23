@@ -8,7 +8,7 @@ import virtual.library.vl.entity.User;
 import virtual.library.vl.repository.RoleRepository;
 import virtual.library.vl.service.UserService;
 
-import java.util.stream.Stream;
+import java.util.Set;
 
 @Component
 public class RoleCreation implements CommandLineRunner {
@@ -25,11 +25,13 @@ public class RoleCreation implements CommandLineRunner {
         roleRepository.save(new Role(2L, "ROLE_ADMINISTRATOR"));
         User user = new User();
         user.setId(1L);
-        user.setMail("iesubbotin@gmail.com");
+        user.setUsername("iesubbotin@gmail.com");
         user.setNickname("admin");
         user.setPassword("123");
         user.setActive(true);
         userService.registerUser(user);
+        userService.loadUserByUsername(user.getUsername());
+        userService.saveUser(user);
     }
 
 }

@@ -13,18 +13,10 @@ import java.util.List;
 @Controller
 public class MainPageController {
 
-    @Autowired
-    RoleRepository roleRepository;
-
     @GetMapping("/")
     @ResponseBody
     public String successLogin(Principal principal){
         return "Login success";
     }
 
-    @GetMapping("/roles")
-    @ResponseBody
-    public List<Role> test(){
-        return roleRepository.findAll();
-    }
 }

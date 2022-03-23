@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByMail(username);
+        User user = userRepository.findByUsername(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
@@ -46,33 +46,20 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean registerUser(User user) {
-        User userFromDBSameMail = userRepository.findByMail(user.getUsername());
+        User userFromDBSameMail = userRepository.findByUsername(user.getUsername());
 
         if (userFromDBSameMail != null) {
             return false;
         }
 
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        user.setActive(true);
         user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
     }
 
-    public User findUserById(Long userId) {
-        Optional<User> userFromDb = userRepository.findById(userId);
-        return userFromDb.orElse(new User());
-    }
-
-    public List<User> findNonActivatedUsers(){
-        return userRepository.findNonActivatedUser();
-    }
-
-    @Transactional
-    public void activateUser(Long id){
-        User user = userRepository.getById(id);
-        user.setActive(true);
-        userRepository.save(user);
-    }
+    public void saveUser(User user){userRepository.save(user);}
 
     public void deleteUser(Long id){
         userRepository.deleteById(id);
