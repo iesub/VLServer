@@ -10,8 +10,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import virtual.library.vl.handler.CustomAuthenticationFailureHandler;
 import virtual.library.vl.service.UserService;
 
 @Configuration
@@ -42,13 +44,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
         http.csrf().disable().cors().and()
                 .authorizeRequests()
                 .antMatchers( "/login", "/ifAuthenticated", "/", "/login", "/registration",
-                        "/loginFailure", "/loginSuccess", "/registration")
+                        "/loginSuccess", "/registration")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .defaultSuccessUrl("/loginSuccess")
-                .failureUrl("/loginFailure")
+                .failureHandler(authenticationFailureHandler())
                 .permitAll()
                 .and()
                 .logout()
@@ -63,5 +65,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(encoder());
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
     }
 }

@@ -10,11 +10,7 @@ import virtual.library.vl.entity.User;
 import virtual.library.vl.repository.RoleRepository;
 import virtual.library.vl.repository.UserRepository;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {

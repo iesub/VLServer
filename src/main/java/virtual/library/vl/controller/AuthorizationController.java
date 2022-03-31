@@ -53,14 +53,6 @@ public class AuthorizationController {
         return "jsonTemplate";
     }
 
-    @GetMapping("/loginFailure")
-    public String loginFailure(Model model){
-        AuthorizationDTO data = new AuthorizationDTO();
-        data.setAuthenticated(false);
-        model.addAttribute("userInfo", data);
-        return "jsonTemplate";
-    }
-
     @PostMapping("/registration")
     public String registration(User user, Model model){
 
