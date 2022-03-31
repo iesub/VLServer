@@ -37,11 +37,13 @@ public class Book {
     BookGenre bookGenre;
     @ManyToMany
     List<BookTag> tags = new ArrayList<>();
-    @JsonManagedReference
-    @OneToMany(mappedBy = "book")
+    @JsonBackReference
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     List<BookPage> pages;
 
     public void addTag(BookTag bookTag){
-        tags.add(bookTag);
+        if (!tags.contains(bookTag)) {
+            tags.add(bookTag);
+        }
     }
 }

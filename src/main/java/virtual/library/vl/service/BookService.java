@@ -13,7 +13,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -103,6 +102,8 @@ public class BookService {
 
     public Book getBook(String name) {return bookRepository.findBookByName(name);}
 
+    public long countBooks(){return bookRepository.count();}
+
     public void transformPDFToPages(MultipartFile mFile, Book book) throws IOException {
         File file = File.createTempFile("prefix-", "-suffix");
         file.deleteOnExit();
@@ -124,5 +125,9 @@ public class BookService {
             bookPageRepository.save(bookPage);
         }
         file.delete();
+    }
+
+    public List<Book> selectBooksWithOffset(Long offset){
+        return bookRepository.findBooksWithOffset(offset);
     }
 }

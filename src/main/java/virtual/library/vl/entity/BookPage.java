@@ -16,7 +16,7 @@ public class BookPage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id = Long.valueOf(0);
     private byte[] pagePicture;
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToOne
     Book book;
 }
