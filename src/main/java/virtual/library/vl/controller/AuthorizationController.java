@@ -64,13 +64,29 @@ public class AuthorizationController {
         Matcher matcher = pattern.matcher(user.getUsername());
         RegistrationDTO data = new RegistrationDTO();
 
-        if(!matcher.matches()){
-            data.setMailCorrect(false);
+
+        if (user.getUsername() == ""){
+            data.setMailEmpty(true);
+            data.setGotError(true);
+        } else {
+            if(!matcher.matches()){
+                data.setMailCorrect(false);
+                data.setGotError(true);
+            }
         }
-        if (!user.getPassword().equals(user.getPasswordConfirm())){
+        if (!user.getPassword().equals(user.getPasswordConfirm())) {
             data.setPasswordsCorrect(false);
+            data.setGotError(true);
         }
-        if (!data.isMailCorrect() || !data.isPasswordsCorrect()){
+        if (user.getNickname() == ""){
+            data.setNicknameEmpty(true);
+            data.setGotError(true);
+        }
+        if (user.getPassword() == ""){
+            data.setPasswordEmpty(true);
+            data.setGotError(true);
+        }
+        if (data.isGotError()){
             model.addAttribute("registrationData", data);
             return "jsonTemplate";
         }
