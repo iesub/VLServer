@@ -130,4 +130,7 @@ public class BookService {
     public List<Book> selectBooksWithOffset(Long offset){
         return bookRepository.findBooksWithOffset(offset);
     }
+
+    public List<Book> selectBooksByNameQuery(String name, Long offset){
+        return bookRepository.findBooksByNameContainingIgnoreCase(name, offset);}
 }

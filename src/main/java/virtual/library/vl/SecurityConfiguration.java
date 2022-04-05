@@ -44,7 +44,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
         http.csrf().disable().cors().and()
                 .authorizeRequests()
                 .antMatchers( "/login", "/ifAuthenticated", "/", "/login", "/registration",
-                        "/loginSuccess", "/registration", "/get/book-count", "/get/book-list", "logout")
+                        "/loginSuccess", "/registration", "/get/book-count", "/get/book-list", "logout",
+                        "/get/book-by-name")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
