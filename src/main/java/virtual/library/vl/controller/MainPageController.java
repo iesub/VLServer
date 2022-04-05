@@ -25,7 +25,7 @@ public class MainPageController {
 
     @GetMapping("/get/book-list")
     public String getBooks(@RequestParam("offset") Long offset, Model model){
-        List<Book> books= bookService.selectBooksWithOffset((offset-1)*20);
+        List<Book> books= bookService.selectBooksWithOffset((offset-1));
         model.addAttribute("response", books);
         return "jsonTemplate";
     }
@@ -33,8 +33,9 @@ public class MainPageController {
     @PostMapping("/get/book-by-name")
     public String getBookByName(@RequestParam("query") String query, @RequestParam("offset") Long offset,
                                 Model model){
-        List<Book> books = bookService.selectBooksByNameQuery(query, (offset-1)*20);
+        List<Book> books = bookService.selectBooksByNameQuery(query, (offset-1));
         model.addAttribute("response", books);
+        model.addAttribute("responseCount", bookService.countFindBookByName(query));
         return "jsonTemplate";
     }
 }

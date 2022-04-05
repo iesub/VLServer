@@ -133,4 +133,8 @@ public class BookService {
 
     public List<Book> selectBooksByNameQuery(String name, Long offset){
         return bookRepository.findBooksByNameContainingIgnoreCase(name, offset);}
+
+    public Long countFindBookByName(String name){
+        return bookRepository.countFindByName(name);
+    }
 }
