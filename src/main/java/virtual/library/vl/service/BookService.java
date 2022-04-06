@@ -4,15 +4,21 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import virtual.library.vl.dto.FiltersDTO;
 import virtual.library.vl.entity.*;
 import virtual.library.vl.repository.*;
 
 import javax.imageio.ImageIO;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.criteria.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,6 +33,8 @@ public class BookService {
     BookRepository bookRepository;
     @Autowired
     BookTagRepository bookTagRepository;
+    @Autowired
+    EntityManagerFactory entityManagerFactory;
 
     public boolean addAuthor(Author author){
         if (authorRepository.existsByName(author.getName())){
@@ -136,5 +144,84 @@ public class BookService {
 
     public Long countFindBookByName(String name){
         return bookRepository.countFindByName(name);
+    }
+
+    public List<Book> selectByFilters(FiltersDTO filtersDTO){
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<Book> bookCriteria = criteriaBuilder.createQuery(Book.class);
+
+        Root<Book> bookRoot = bookCriteria.from(Book.class);
+
+        bookCriteria.select(bookRoot);
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        if (filtersDTO.getAuthor() != null){
+            predicates.add(criteriaBuilder.equal(bookRoot.get("author"), filtersDTO.getAuthor()));
+        }
+        if (filtersDTO.getGenre() != null){
+            predicates.add(criteriaBuilder.equal(bookRoot.get("bookGenre"), filtersDTO.getGenre()));
+        }
+        if (filtersDTO.getTag() != null) {
+            Join<BookTag, Book> join = bookRoot.join("tags");
+            List<Long> ids = new ArrayList<>();
+            for (int i = 0; i < filtersDTO.getTag().size(); i++) {
+                ids.add(filtersDTO.getTag().get(i).getId());
+            }
+            predicates.add(join.in(ids));
+        }
+        Expression<Long> count = criteriaBuilder.count(bookRoot.get(("id")));
+        bookCriteria.where(predicates.toArray(new Predicate[]{}));
+
+        if (filtersDTO.getTag() != null) {
+            bookCriteria.groupBy(bookRoot.get("id"));
+            bookCriteria.having(criteriaBuilder.equal(count, filtersDTO.getTag().size()));
+        }
+
+        List<Order> orderList = new ArrayList<>();
+        orderList.add(criteriaBuilder.desc(bookRoot.get("id")));
+
+        bookCriteria.orderBy(orderList);
+        List<Book> books = entityManager.createQuery(bookCriteria).setFirstResult(Math.toIntExact(filtersDTO.getOffset()-1)).
+                setMaxResults(20).getResultList();
+        entityManager.close();
+        return books;
+    }
+
+    public Long countByFilters(FiltersDTO filtersDTO){
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<Long> bookCriteria = criteriaBuilder.createQuery(Long.class);
+
+        Root<Book> bookRoot = bookCriteria.from(Book.class);
+
+        bookCriteria.select(criteriaBuilder.count(bookRoot));
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        if (filtersDTO.getAuthor() != null){
+            predicates.add(criteriaBuilder.equal(bookRoot.get("author"), filtersDTO.getAuthor()));
+        }
+        if (filtersDTO.getGenre() != null){
+            predicates.add(criteriaBuilder.equal(bookRoot.get("bookGenre"), filtersDTO.getGenre()));
+        }
+        if (filtersDTO.getTag() != null) {
+            Join<BookTag, Book> join = bookRoot.join("tags");
+            List<Long> ids = new ArrayList<>();
+            for (int i = 0; i < filtersDTO.getTag().size(); i++) {
+                ids.add(filtersDTO.getTag().get(i).getId());
+            }
+            predicates.add(join.in(ids));
+        }
+        Expression<Long> count = criteriaBuilder.count(bookRoot.get(("id")));
+        bookCriteria.where(predicates.toArray(new Predicate[]{}));
+
+        if (filtersDTO.getTag() != null) {
+            bookCriteria.groupBy(bookRoot.get("id"));
+            bookCriteria.having(criteriaBuilder.equal(count, filtersDTO.getTag().size()));
+        }
+
+        Long result = entityManager.createQuery(bookCriteria).getSingleResult();
+        entityManager.close();
+        return result;
     }
 }

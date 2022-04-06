@@ -35,7 +35,7 @@ public class Book {
     @ManyToOne
     @JsonManagedReference
     BookGenre bookGenre;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     List<BookTag> tags = new ArrayList<>();
     @JsonBackReference
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)

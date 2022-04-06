@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import virtual.library.vl.handler.CustomAuthenticationFailureHandler;
@@ -19,6 +20,7 @@ import virtual.library.vl.service.UserService;
 @Configuration
 @EnableWebSecurity
 @EnableJpaRepositories
+@EnableTransactionManagement
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter
         implements WebMvcConfigurer {
 

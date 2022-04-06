@@ -18,11 +18,15 @@ public class BookGenre {@Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id = Long.valueOf(0);
     private String name;
-    @OneToMany(mappedBy = "bookGenre")
+    @OneToMany(mappedBy = "bookGenre", fetch = FetchType.LAZY)
     @JsonBackReference
     List<Book> books;
 
     public BookGenre() {
 
+    }
+
+    public BookGenre(Long id){
+        this.id = id;
     }
 }

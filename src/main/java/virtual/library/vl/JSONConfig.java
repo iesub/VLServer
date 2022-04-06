@@ -2,6 +2,9 @@ package virtual.library.vl;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
@@ -9,6 +12,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 
 @Configuration
+@EnableTransactionManagement
 public class JSONConfig
 {
     @Bean

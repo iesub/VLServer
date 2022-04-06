@@ -19,11 +19,15 @@ public class BookTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id = Long.valueOf(0);
     private String name;
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
     @JsonBackReference
     List<Book> books;
 
     public BookTag() {
 
+    }
+
+    public BookTag(Long id){
+        this.id = id;
     }
 }

@@ -20,10 +20,14 @@ public class Author {
     private Long id = Long.valueOf(0);
     private String name;
     @JsonBackReference
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     List<Book> books;
 
     public Author() {
 
+    }
+
+    public Author(Long id){
+        this.id = id;
     }
 }
