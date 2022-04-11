@@ -13,6 +13,7 @@ import virtual.library.vl.repository.*;
 import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -181,9 +182,13 @@ public class BookService {
         List<Order> orderList = new ArrayList<>();
         orderList.add(criteriaBuilder.desc(bookRoot.get("id")));
 
+        List<Book> books = new ArrayList<>();
+
         bookCriteria.orderBy(orderList);
-        List<Book> books = entityManager.createQuery(bookCriteria).setFirstResult(Math.toIntExact(filtersDTO.getOffset()-1)).
-                setMaxResults(20).getResultList();
+        try {
+            books = entityManager.createQuery(bookCriteria).setFirstResult(Math.toIntExact(filtersDTO.getOffset() - 1)).
+                    setMaxResults(20).getResultList();
+        } catch (NoResultException nre) {}
         entityManager.close();
         return books;
     }
@@ -220,7 +225,12 @@ public class BookService {
             bookCriteria.having(criteriaBuilder.equal(count, filtersDTO.getTag().size()));
         }
 
-        Long result = entityManager.createQuery(bookCriteria).getSingleResult();
+        Long result = 0L;
+        try {
+            result = entityManager.createQuery(bookCriteria).getSingleResult();
+        } catch (NoResultException nre){
+
+        }
         entityManager.close();
         return result;
     }

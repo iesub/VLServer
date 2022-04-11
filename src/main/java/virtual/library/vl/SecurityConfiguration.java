@@ -47,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
                 .authorizeRequests()
                 .antMatchers( "/login", "/ifAuthenticated", "/", "/login", "/registration",
                         "/loginSuccess", "/registration", "/get/book-count", "/get/book-list", "logout",
-                        "/get/book-by-name")
+                        "/get/book-by-name", "/get/authors", "/get/book-genres", "/get/book-tags", "/get/book-by-filter")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()

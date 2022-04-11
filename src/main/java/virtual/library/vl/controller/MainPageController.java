@@ -20,6 +20,12 @@ public class MainPageController {
     @Autowired
     BookService bookService;
 
+    @GetMapping("/")
+    public String logout(Model model){
+        model.addAttribute("response", "LOGOUT");
+        return "jsonTemplate";
+    }
+
     @GetMapping("/get/book-count")
     public String getBooCount(Model model){
         model.addAttribute("response", bookService.countBooks());
