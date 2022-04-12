@@ -2,11 +2,14 @@ package virtual.library.vl.service;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.rendering.ImageType;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import virtual.library.vl.dto.FiltersDTO;
+import virtual.library.vl.dto.PageDTO;
 import virtual.library.vl.entity.*;
 import virtual.library.vl.repository.*;
 
@@ -122,9 +125,19 @@ public class BookService {
             e.printStackTrace();
         }
         PDDocument document = PDDocument.load(file);
-        List<PDPage> pdPages = document.getDocumentCatalog().getAllPages();
-        for (PDPage pdPage : pdPages) {
-            BufferedImage bim = pdPage.convertToImage(BufferedImage.TYPE_INT_RGB, 300);
+        PDFRenderer pdfRenderer = new PDFRenderer(document);
+//        for (PDPage pdPage : pdPages) {
+//            BufferedImage bim = pdPage.(BufferedImage.TYPE_INT_RGB, 300);
+//            ByteArrayOutputStream image = new ByteArrayOutputStream();
+//            ImageIO.write(bim, "png", image);
+//            byte[] bytes = image.toByteArray();
+//            BookPage bookPage = new BookPage();
+//            bookPage.setBook(book);
+//            bookPage.setPagePicture(bytes);
+//            bookPageRepository.save(bookPage);
+//        }
+        for (int page = 0; page < document.getNumberOfPages(); ++page){
+            BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
             ByteArrayOutputStream image = new ByteArrayOutputStream();
             ImageIO.write(bim, "png", image);
             byte[] bytes = image.toByteArray();
@@ -239,7 +252,11 @@ public class BookService {
         return bookPageRepository.countByBook(id);
     }
 
-    public BookPage getPageByBookAndOffset(Long bookId, Long offset){
-        return bookPageRepository.getBookPageByNumber(bookId, offset);
+    public PageDTO getPageByBookAndOffset(Long bookId, Long offset){
+        BookPage page = bookPageRepository.getBookPageByNumber(bookId, offset);
+        PageDTO pageDTO = new PageDTO();
+        pageDTO.setPagePicture(page.getPagePicture());
+        pageDTO.setId(page.getId());
+        return pageDTO;
     }
 }

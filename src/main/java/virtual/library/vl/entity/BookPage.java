@@ -17,6 +17,6 @@ public class BookPage {
     private Long id = Long.valueOf(0);
     private byte[] pagePicture;
     @JsonManagedReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     Book book;
 }
