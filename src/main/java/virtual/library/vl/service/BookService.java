@@ -106,7 +106,7 @@ public class BookService {
     }
 
     public Book getBook(Long id){
-        return bookRepository.getById(id);
+        return bookRepository.findBookByIdCustom(id);
     }
 
     public Book getBook(String name) {return bookRepository.findBookByName(name);}
@@ -233,5 +233,13 @@ public class BookService {
         }
         entityManager.close();
         return result;
+    }
+
+    public Long countPagesByBook(Long id){
+        return bookPageRepository.countByBook(id);
+    }
+
+    public BookPage getPageByBookAndOffset(Long bookId, Long offset){
+        return bookPageRepository.getBookPageByNumber(bookId, offset);
     }
 }
