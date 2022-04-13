@@ -126,16 +126,6 @@ public class BookService {
         }
         PDDocument document = PDDocument.load(file);
         PDFRenderer pdfRenderer = new PDFRenderer(document);
-//        for (PDPage pdPage : pdPages) {
-//            BufferedImage bim = pdPage.(BufferedImage.TYPE_INT_RGB, 300);
-//            ByteArrayOutputStream image = new ByteArrayOutputStream();
-//            ImageIO.write(bim, "png", image);
-//            byte[] bytes = image.toByteArray();
-//            BookPage bookPage = new BookPage();
-//            bookPage.setBook(book);
-//            bookPage.setPagePicture(bytes);
-//            bookPageRepository.save(bookPage);
-//        }
         for (int page = 0; page < document.getNumberOfPages(); ++page){
             BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
             ByteArrayOutputStream image = new ByteArrayOutputStream();
@@ -258,5 +248,10 @@ public class BookService {
         pageDTO.setPagePicture(page.getPagePicture());
         pageDTO.setId(page.getId());
         return pageDTO;
+    }
+
+    public void deleteBook(Long bookId){
+        bookRepository.deleteBookTags(bookId);
+        bookRepository.deleteBookById(bookId);
     }
 }

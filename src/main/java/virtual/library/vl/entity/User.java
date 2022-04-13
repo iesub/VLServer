@@ -1,5 +1,7 @@
 package virtual.library.vl.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -7,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -26,6 +29,9 @@ public class User implements UserDetails {
     private Set<Role> roles;
     @Column(name = "activated")
     boolean isActive = false;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "owner")
+    List<BookShelf> shelfList;
 
     public User(){}
 

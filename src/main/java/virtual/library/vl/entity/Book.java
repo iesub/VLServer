@@ -40,6 +40,9 @@ public class Book {
     @JsonBackReference
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     List<BookPage> pages;
+    @JsonBackReference
+    @ManyToMany
+    List<BookShelf> shelves;
 
     public void addTag(BookTag bookTag){
         if (!tags.contains(bookTag)) {
