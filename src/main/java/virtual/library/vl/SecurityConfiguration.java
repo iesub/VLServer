@@ -35,7 +35,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000", "https://virtual-book-shelf.herokuapp.com")
+                .allowedOrigins("http://localhost:3000")
+                .allowedOrigins("https://virtual-book-shelf.herokuapp.com")
                 .allowedMethods("*")
                 .allowCredentials(true);
     }
