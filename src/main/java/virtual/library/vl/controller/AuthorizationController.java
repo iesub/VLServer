@@ -43,6 +43,7 @@ public class AuthorizationController {
 
     @GetMapping("/loginSuccess")
     public String loginSuccess(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = (User) principal;
         AuthorizationDTO data = new AuthorizationDTO();
