@@ -14,6 +14,7 @@ import virtual.library.vl.entity.User;
 import virtual.library.vl.service.UserService;
 
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,8 +43,8 @@ public class AuthorizationController {
 
     @GetMapping("/loginSuccess")
     public String loginSuccess(Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = (User) principal;
         AuthorizationDTO data = new AuthorizationDTO();
         data.setAuthenticated(true);
         data.setMail(user.getUsername());
