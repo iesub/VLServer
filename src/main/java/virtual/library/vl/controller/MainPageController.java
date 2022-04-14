@@ -55,4 +55,11 @@ public class MainPageController {
         model.addAttribute("responseCount", bookService.countByFilters(filters));
         return "jsonTemplate";
     }
+
+    @PostMapping("/delete/book")
+    public String deleteBook(Model model, @RequestParam("bookId") Long id){
+        bookService.deleteBook(id);
+        return "jsonTemplate";
+    }
+
 }

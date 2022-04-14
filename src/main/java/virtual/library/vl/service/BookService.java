@@ -1,7 +1,7 @@
 package virtual.library.vl.service;
 
+
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,6 +136,7 @@ public class BookService {
             bookPage.setPagePicture(bytes);
             bookPageRepository.save(bookPage);
         }
+        document.close();
         file.delete();
     }
 
@@ -252,6 +253,7 @@ public class BookService {
 
     public void deleteBook(Long bookId){
         bookRepository.deleteBookTags(bookId);
+        bookRepository.deleteBookPages(bookId);
         bookRepository.deleteBookById(bookId);
     }
 }

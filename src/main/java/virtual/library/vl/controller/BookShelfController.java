@@ -25,6 +25,9 @@ public class BookShelfController {
     public String getShelves(Model model){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = (User) principal;
+        if (user == null){
+            return "jsonTemplate";
+        }
         model.addAttribute("response", bookShelfService.getShelvesByUser(user));
         return "jsonTemplate";
     }
@@ -78,6 +81,9 @@ public class BookShelfController {
     public String getShelf(@RequestParam("id") Long id, Model model){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = (User) principal;
+        if (user == null){
+            return "jsonTemplate";
+        }
         BookShelf shelf = bookShelfService.getShelfById(id);
         if (!Objects.equals(shelf.getOwner().getId(), user.getId())){
             model.addAttribute("response", "OWNERSHIP_ERROR");
@@ -91,6 +97,9 @@ public class BookShelfController {
     public String getBooksFromShelf(@RequestParam("id") Long shelfIDd, Model model){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = (User) principal;
+        if (user == null){
+            return "jsonTemplate";
+        }
         BookShelf shelf = bookShelfService.getShelfById(shelfIDd);
         if (!Objects.equals(shelf.getOwner().getId(), user.getId())){
             model.addAttribute("response", "OWNERSHIP_ERROR");

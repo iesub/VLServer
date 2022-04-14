@@ -45,6 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
             Exception {
         http.csrf().disable().cors().and()
                 .authorizeRequests()
+                .antMatchers("/delete/book").hasAuthority("ROLE_ADMINISTRATOR")
                 .antMatchers( "/login", "/ifAuthenticated", "/", "/login", "/registration",
                         "/loginSuccess", "/registration", "/get/book-count", "/get/book-list", "logout",
                         "/get/book-by-name", "/get/authors", "/get/book-genres", "/get/book-tags", "/get/book-by-filter")
